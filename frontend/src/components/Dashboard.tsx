@@ -43,6 +43,7 @@ const Dashboard: React.FC = () => {
   const [period, setPeriod] = useState("daily");
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchStats();
@@ -50,22 +51,23 @@ const Dashboard: React.FC = () => {
 
   const fetchStats = async () => {
     setLoading(true);
+    setError("");
     try {
       const response = await activitiesAPI.getDashboardStats(period);
       setStats(response.data);
-    } catch (error) {
-      console.error("Error fetching stats:", error);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Failed to load dashboard data");
     } finally {
       setLoading(false);
     }
   };
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="text-gray-600">Loading dashboard...</div>
-      </div>
-    );
+    return <Loading message="Loading dashboard data..." />;
+  }
+
+  if (error) {
+    return <ErrorMessage message={error} onRetry={fetchStats} />;
   }
 
   if (!stats) {
