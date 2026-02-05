@@ -1,19 +1,13 @@
 // Import required packages
-require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const connectDB = require("./backend/config/db");
-const errorHandler = require("./backend/middleware/errorHandler");
-
-// Connect to MongoDB
-connectDB();
 
 // Create Express app
 const app = express();
-const port = process.env.PORT || 3001;
+const port = 3001;
 
 var corsOptions = {
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  origin: "http://localhost:5173",
   credentials: true,
 };
 
@@ -22,12 +16,6 @@ app.use(cors(corsOptions));
 // Define middleware to parse JSON bodies
 app.use(express.json());
 
-// API Routes
-app.use("/api/auth", require("./backend/routes/auth"));
-app.use("/api/activities", require("./backend/routes/activities"));
-app.use("/api/ai", require("./backend/routes/ai"));
-
-// Keep legacy calculator endpoint for backward compatibility
 app.post("/calculate", (req, res) => {
   try {
     // Get input data from the request body
@@ -37,22 +25,27 @@ app.post("/calculate", (req, res) => {
       flightsShortHaul,
       flightsMediumHaul,
       flightsLongHaul,
-      dietaryChoice,
+      dietaryChoice, // Vegan, Vegetarian, Pescatarian, MeatEater
+      // recycleNewspaper, // Boolean flag for recycling newspaper
+      // recycleAluminum // Boolean flag for recycling aluminum
     } = req.body;
 
     // Constants for emission factors and conversion factors
-    const electricityFactor = 0.3978;
-    const transportationFactor = 9.087;
-    const kgCO2ePerYearFactor = 12;
-    const airTravelFactorShortHaul = 100;
-    const airTravelFactorMediumHaul = 200;
-    const airTravelFactorLongHaul = 300;
+    const electricityFactor = 0.3978; // Example factor for electricity emissions calculation
+    const transportationFactor = 9.087; // Example factor for transportation emissions calculation
+    const kgCO2ePerYearFactor = 12; // Conversion factor for monthly to yearly emissions
+    const airTravelFactorShortHaul = 100; // Example factor for short-haul flight emissions (adjust as needed)
+    const airTravelFactorMediumHaul = 200; // Example factor for medium-haul flight emissions (adjust as needed)
+    const airTravelFactorLongHaul = 300; // Example factor for long-haul flight emissions (adjust as needed)
     const dietaryFactors = {
-      Vegan: 200,
-      Vegetarian: 400,
-      Pescatarian: 600,
-      MeatEater: 800,
+      //daily carbon x 30 x 12 -> kg
+      Vegan: 200, // Example factor for vegan diet
+      Vegetarian: 400, // Example factor for vegetarian diet
+      Pescatarian: 600, // Example factor for pescatarian diet
+      MeatEater: 800, // Example factor for meat-eater diet
     };
+    //   const newspaperRecyclingFactor = 184; // Additional factor for not recycling newspaper
+    //   const aluminumRecyclingFactor = 166; // Additional factor for not recycling aluminum
 
     // Calculate CO2 emissions for electricity and transportation
     const electricityEmissions = electricityUsageKWh * electricityFactor;
@@ -68,7 +61,7 @@ app.post("/calculate", (req, res) => {
       flightsLongHaul * airTravelFactorLongHaul;
 
     // Calculate dietary choice emissions
-    const dietaryChoiceEmissions = dietaryFactors[dietaryChoice] || 0;
+    const dietaryChoiceEmissions = dietaryFactors[dietaryChoice] || 0; // Default to 0 if choice not found
 
     // Calculate total air travel emissions
     const totalAirTravelEmissions =
@@ -88,6 +81,15 @@ app.post("/calculate", (req, res) => {
       yearlyTransportationEmissions +
       totalAirTravelEmissions +
       dietaryChoiceEmissions;
+
+    // Add additional factors if recycling is not done
+    //   if (!recycleNewspaper) {
+    //     totalYearlyEmissions += newspaperRecyclingFactor;
+    //   }
+
+    //   if (!recycleAluminum) {
+    //     totalYearlyEmissions += aluminumRecyclingFactor;
+    //   }
 
     // Prepare response object with units included
     const result = {
@@ -137,9 +139,6 @@ app.post("/calculate", (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
-// Error handler middleware (must be last)
-app.use(errorHandler);
 
 // Start the Express server
 app.listen(port, () => {

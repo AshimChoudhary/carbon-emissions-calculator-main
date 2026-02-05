@@ -81,6 +81,7 @@
 ## API Testing with cURL
 
 ### Register
+
 ```bash
 curl -X POST http://localhost:5000/api/auth/register \
   -H "Content-Type: application/json" \
@@ -88,6 +89,7 @@ curl -X POST http://localhost:5000/api/auth/register \
 ```
 
 ### Login
+
 ```bash
 curl -X POST http://localhost:5000/api/auth/login \
   -H "Content-Type: application/json" \
@@ -95,6 +97,7 @@ curl -X POST http://localhost:5000/api/auth/login \
 ```
 
 ### Create Activity
+
 ```bash
 curl -X POST http://localhost:5000/api/activities \
   -H "Content-Type: application/json" \
@@ -103,12 +106,14 @@ curl -X POST http://localhost:5000/api/activities \
 ```
 
 ### Get Dashboard Summary
+
 ```bash
 curl http://localhost:5000/api/activities/dashboard/summary?period=weekly \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
 ### Get AI Recommendations
+
 ```bash
 curl http://localhost:5000/api/ai/recommendations \
   -H "Authorization: Bearer YOUR_TOKEN"
@@ -117,11 +122,13 @@ curl http://localhost:5000/api/ai/recommendations \
 ## Browser Testing
 
 ### Supported Browsers
+
 - Chrome/Edge (latest)
 - Firefox (latest)
 - Safari (latest)
 
 ### Responsive Testing
+
 - Desktop (1920x1080)
 - Laptop (1366x768)
 - Tablet (768x1024)
@@ -143,12 +150,14 @@ curl http://localhost:5000/api/ai/recommendations \
 ## Debugging Tips
 
 ### Check Backend Logs
+
 ```bash
 # In terminal running backend
 # Look for errors in console output
 ```
 
 ### Check Browser Console
+
 ```bash
 # Open Developer Tools (F12)
 # Check Console tab for errors
@@ -156,6 +165,7 @@ curl http://localhost:5000/api/ai/recommendations \
 ```
 
 ### Verify MongoDB Data
+
 ```bash
 mongosh
 use carbon-calculator
