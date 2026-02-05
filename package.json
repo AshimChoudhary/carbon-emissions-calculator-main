@@ -1,15 +1,24 @@
 {
-  "name": "co2",
+  "name": "carbon-footprint-calculator",
   "version": "1.0.0",
-  "description": "",
+  "description": "Carbon Footprint Calculator with AI Recommendations",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "install-all": "npm install && cd frontend && npm install",
+    "build": "cd frontend && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "carbon",
+    "emissions",
+    "sustainability",
+    "ai",
+    "calculator"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
