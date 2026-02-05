@@ -40,7 +40,7 @@
 
 ### Sample Activities
 
-```json
+\`\`\`json
 {
   "type": "transport",
   "category": "car",
@@ -48,9 +48,9 @@
   "unit": "km",
   "date": "2026-02-05"
 }
-```
+\`\`\`
 
-```json
+\`\`\`json
 {
   "type": "energy",
   "category": "electricity",
@@ -58,9 +58,9 @@
   "unit": "kWh",
   "date": "2026-02-05"
 }
-```
+\`\`\`
 
-```json
+\`\`\`json
 {
   "type": "diet",
   "category": "beef",
@@ -68,7 +68,7 @@
   "unit": "meals",
   "date": "2026-02-05"
 }
-```
+\`\`\`
 
 ### Expected Calculations
 
@@ -81,54 +81,47 @@
 ## API Testing with cURL
 
 ### Register
-
-```bash
-curl -X POST http://localhost:5000/api/auth/register \
-  -H "Content-Type: application/json" \
+\`\`\`bash
+curl -X POST http://localhost:5000/api/auth/register \\
+  -H "Content-Type: application/json" \\
   -d '{"name":"Test User","email":"test@example.com","password":"password123"}'
-```
+\`\`\`
 
 ### Login
-
-```bash
-curl -X POST http://localhost:5000/api/auth/login \
-  -H "Content-Type: application/json" \
+\`\`\`bash
+curl -X POST http://localhost:5000/api/auth/login \\
+  -H "Content-Type: application/json" \\
   -d '{"email":"test@example.com","password":"password123"}'
-```
+\`\`\`
 
 ### Create Activity
-
-```bash
-curl -X POST http://localhost:5000/api/activities \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_TOKEN" \
+\`\`\`bash
+curl -X POST http://localhost:5000/api/activities \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer YOUR_TOKEN" \\
   -d '{"type":"transport","category":"car","value":50,"unit":"km"}'
-```
+\`\`\`
 
 ### Get Dashboard Summary
-
-```bash
-curl http://localhost:5000/api/activities/dashboard/summary?period=weekly \
+\`\`\`bash
+curl http://localhost:5000/api/activities/dashboard/summary?period=weekly \\
   -H "Authorization: Bearer YOUR_TOKEN"
-```
+\`\`\`
 
 ### Get AI Recommendations
-
-```bash
-curl http://localhost:5000/api/ai/recommendations \
+\`\`\`bash
+curl http://localhost:5000/api/ai/recommendations \\
   -H "Authorization: Bearer YOUR_TOKEN"
-```
+\`\`\`
 
 ## Browser Testing
 
 ### Supported Browsers
-
 - Chrome/Edge (latest)
 - Firefox (latest)
 - Safari (latest)
 
 ### Responsive Testing
-
 - Desktop (1920x1080)
 - Laptop (1366x768)
 - Tablet (768x1024)
@@ -143,32 +136,29 @@ curl http://localhost:5000/api/ai/recommendations \
 
 ## Known Limitations
 
-- OpenAI API requires valid key and has rate limits
+- Google Gemini API has rate limits (60 requests/min)
 - MongoDB must be running
 - Frontend uses local storage for token (not secure for production)
 
 ## Debugging Tips
 
 ### Check Backend Logs
-
-```bash
+\`\`\`bash
 # In terminal running backend
 # Look for errors in console output
-```
+\`\`\`
 
 ### Check Browser Console
-
-```bash
+\`\`\`bash
 # Open Developer Tools (F12)
 # Check Console tab for errors
 # Check Network tab for API calls
-```
+\`\`\`
 
 ### Verify MongoDB Data
-
-```bash
+\`\`\`bash
 mongosh
 use carbon-calculator
 db.activities.find()
 db.users.find()
-```
+\`\`\`

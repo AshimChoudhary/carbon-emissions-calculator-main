@@ -1,18 +1,8 @@
 const Activity = require("../models/Activity");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// Support both OpenAI and Google Gemini (free tier)
-const AI_PROVIDER = process.env.AI_PROVIDER || "gemini"; // 'openai' or 'gemini'
-
-let aiClient;
-if (AI_PROVIDER === "openai") {
-  const OpenAI = require("openai");
-  aiClient = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-} else if (AI_PROVIDER === "gemini") {
-  const { GoogleGenerativeAI } = require("@google/generative-ai");
-  aiClient = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-}
+// Initialize Google Gemini AI (FREE tier: 60 requests/minute)
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // @desc    Get AI recommendations based on user activities
 // @route   GET /api/ai/recommendations
@@ -62,9 +52,7 @@ Breakdown by Category:
 Number of logged days: ${activities.length}
     `.trim();
 
-    // Generate AI recommendations based on provider
-    let recommendations;
-
+    // Generate AI recommendations using Google Gemini
     const prompt = `You are a sustainability expert.
 Analyze the following user's carbon emission data:
 
@@ -75,33 +63,10 @@ ${dataSummary}
 3. Quantify impact where possible.
 4. Keep advice practical and concise.`;
 
-    if (AI_PROVIDER === "openai") {
-      const completion = await aiClient.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a sustainability expert specializing in carbon footprint reduction.",
-          },
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-        temperature: 0.7,
-        max_tokens: 500,
-      });
-      recommendations = completion.choices[0].message.content;
-    } else if (AI_PROVIDER === "gemini") {
-      // Using Google Gemini (FREE tier: 60 requests/minute)
-      const model = aiClient.getGenerativeModel({ model: "gemini-pro" });
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      recommendations = response.text();
-    } else {
-      throw new Error("Invalid AI provider configured");
-    }
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const recommendations = response.text();
 
     res.json({
       summary: totalEmissions,
