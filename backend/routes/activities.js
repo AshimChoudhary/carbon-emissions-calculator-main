@@ -6,10 +6,13 @@ const {
   getActivity,
   updateActivity,
   deleteActivity,
+  getDashboardStats,
 } = require("../controllers/activityController");
 const { protect } = require("../middleware/auth");
 
 router.route("/").post(protect, createActivity).get(protect, getActivities);
+
+router.get("/dashboard/stats", protect, getDashboardStats);
 
 router
   .route("/:id")
